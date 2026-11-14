@@ -250,6 +250,8 @@ export async function activateSubscriptionInDB(
     orderId?: string;
     paymentMethod: string;
     amount: number;
+    email?: string | null;
+    displayName?: string | null;
   }
 ): Promise<UserProfile> {
   const now = new Date();
@@ -270,11 +272,57 @@ export async function activateSubscriptionInDB(
 
   if (isFirebaseConfigured && db) {
     try {
+      // 1. Root collection `payments/{paymentId}` (directly visible in Firebase Console)
+      const paymentRef = doc(db, "payments", paymentInfo.paymentId);
+      await setDoc(paymentRef, {
+        paymentId: paymentInfo.paymentId,
+        orderId: paymentInfo.orderId || "",
+        uid: uid,
+        userEmail: paymentInfo.email || "architect@cadfast.ai",
+        userName: paymentInfo.displayName || "CAD Architect",
+        amount: paymentInfo.amount,
+        amountInPaise: Math.round(paymentInfo.amount * 100),
+        currency: "INR",
+        plan: paymentInfo.plan,
+        planTitle: "CAD FAST Early Access Pass (1st Month ₹99 Offer)",
+        regularPrice: 2000,
+        discountApplied: "95% Early Adopter Discount (Saved ₹1,901)",
+        paymentMethod: paymentInfo.paymentMethod,
+        gateway: "Razorpay",
+        status: "SUCCESS",
+        createdAt: serverTimestamp(),
+        createdAtISO: now.toISOString(),
+        expiresAtISO: expires.toISOString(),
+      }, { merge: true });
+
+      // 2. User subcollection `users/{uid}/payments/{paymentId}`
+      const userPaymentRef = doc(db, "users", uid, "payments", paymentInfo.paymentId);
+      await setDoc(userPaymentRef, {
+        paymentId: paymentInfo.paymentId,
+        orderId: paymentInfo.orderId || "",
+        amount: paymentInfo.amount,
+        currency: "INR",
+        status: "SUCCESS",
+        paymentMethod: paymentInfo.paymentMethod,
+        plan: paymentInfo.plan,
+        createdAt: serverTimestamp(),
+        createdAtISO: now.toISOString(),
+      }, { merge: true });
+
+      // 3. User document `users/{uid}`
       const userRef = doc(db, "users", uid);
       await setDoc(userRef, {
         ...updatePayload,
+        lastPaymentId: paymentInfo.paymentId,
+        lastOrderId: paymentInfo.orderId || "",
+        lastPaymentMethod: paymentInfo.paymentMethod,
+        lastPaymentAmount: paymentInfo.amount,
+        currency: "INR",
+        paymentStatus: "SUCCESS",
         updatedAt: serverTimestamp(),
       }, { merge: true });
+
+      console.log(`✓ Payment ${paymentInfo.paymentId} saved to Firestore collections 'payments' and 'users/${uid}'!`);
     } catch (err) {
       console.warn("Could not write subscription to Firestore, using fallback storage:", err);
     }

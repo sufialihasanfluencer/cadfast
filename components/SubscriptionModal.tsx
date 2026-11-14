@@ -69,13 +69,18 @@ export default function SubscriptionModal() {
       // Trigger Razorpay live checkout
       const result = await initiateRazorpayPayment({
         amount: 99,
+        userId: user.uid,
         userName: user.displayName || "CAD Architect",
         userEmail: user.email || "user@cadfast.ai",
       });
 
       if (result.success && result.paymentId) {
-        // Activate in Firestore & Local state
-        await activateSubscription(`Razorpay (${result.paymentId})`);
+        // Activate and save to Firestore collections `payments` & `users`
+        await activateSubscription(`Razorpay (${result.paymentId})`, {
+          paymentId: result.paymentId,
+          orderId: result.orderId,
+          amount: 99,
+        });
         setSuccessPaymentId(result.paymentId);
         
         try {
@@ -115,7 +120,11 @@ export default function SubscriptionModal() {
       await new Promise((r) => setTimeout(r, 1200));
 
       const fakePayId = "PAY_RZP_" + Math.random().toString(36).substring(2, 9).toUpperCase();
-      await activateSubscription(`UPI QR (${fakePayId})`);
+      await activateSubscription(`UPI QR (${fakePayId})`, {
+        paymentId: fakePayId,
+        orderId: "ORDER_UPI_" + Date.now(),
+        amount: 99,
+      });
       setSuccessPaymentId(fakePayId);
 
       try {

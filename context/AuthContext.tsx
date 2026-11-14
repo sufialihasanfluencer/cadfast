@@ -20,7 +20,7 @@ interface AuthContextType {
   loading: boolean;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
-  activateSubscription: (method?: string) => Promise<void>;
+  activateSubscription: (method?: string, paymentDetails?: { paymentId?: string; orderId?: string; amount?: number }) => Promise<void>;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
   isSubscribeModalOpen: boolean;
@@ -167,19 +167,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   };
 
-  const activateSubscription = async (method: string = "UPI / Razorpay Instant") => {
+  const activateSubscription = async (
+    method: string = "UPI / Razorpay Instant",
+    paymentDetails?: { paymentId?: string; orderId?: string; amount?: number }
+  ) => {
     if (!user) {
       setIsAuthModalOpen(true);
       return;
     }
 
     try {
-      const paymentId = "PAY_" + Math.random().toString(36).substring(2, 10).toUpperCase();
+      const paymentId = paymentDetails?.paymentId || ("PAY_" + Math.random().toString(36).substring(2, 10).toUpperCase());
+      const orderId = paymentDetails?.orderId || ("ORDER_" + Date.now());
+      const amount = paymentDetails?.amount || 99;
+
       const updated = await activateSubscriptionInDB(user.uid, {
         plan: "early_bird_99",
         paymentId,
+        orderId,
         paymentMethod: method,
-        amount: 99,
+        amount,
+        email: user.email,
+        displayName: user.displayName,
       });
       setUser(updated);
       setIsSubscribeModalOpenState(false);

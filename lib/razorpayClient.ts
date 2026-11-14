@@ -43,6 +43,7 @@ export async function initiateRazorpayPayment(options: {
   userName?: string;
   userEmail?: string;
   userPhone?: string;
+  userId?: string;
 }): Promise<RazorpayPaymentResult> {
   const isLoaded = await loadRazorpayScript();
   if (!isLoaded) {
@@ -91,11 +92,17 @@ export async function initiateRazorpayPayment(options: {
         razorpay_signature: string;
       }) {
         try {
-          // 3. Verify Payment Signature via Next.js API route
+          // 3. Verify Payment Signature and record in DB via Next.js API route
           const verifyRes = await fetch("/api/razorpay/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response),
+            body: JSON.stringify({
+              ...response,
+              uid: options.userId,
+              userEmail: options.userEmail,
+              userName: options.userName,
+              amount: options.amount || 99,
+            }),
           });
 
           const verifyData = await verifyRes.json();

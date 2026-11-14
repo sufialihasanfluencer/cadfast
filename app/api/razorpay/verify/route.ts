@@ -1,9 +1,19 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { savePaymentToFirestore } from "@/lib/paymentStore";
 
 export async function POST(req: Request) {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = await req.json();
+    const body = await req.json();
+    const { 
+      razorpay_order_id, 
+      razorpay_payment_id, 
+      razorpay_signature,
+      uid,
+      userEmail,
+      userName,
+      amount
+    } = body;
 
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
     if (!keySecret) {
@@ -35,9 +45,26 @@ export async function POST(req: Request) {
       );
     }
 
+    // Store verified payment in Firestore Database
+    const savedInDB = await savePaymentToFirestore({
+      paymentId: razorpay_payment_id,
+      orderId: razorpay_order_id,
+      signature: razorpay_signature,
+      uid: uid || undefined,
+      userEmail: userEmail || undefined,
+      userName: userName || undefined,
+      amount: amount || 99,
+      plan: "early_bird_99",
+      planTitle: "CAD FAST Early Access Pass (1st Month ₹99 Offer)",
+      paymentMethod: "Razorpay (Online Payment)",
+      gateway: "Razorpay",
+      status: "SUCCESS",
+    });
+
     return NextResponse.json({
       success: true,
-      message: "Payment signature verified successfully",
+      message: "Payment signature verified and stored in database successfully",
+      savedInDB,
       paymentId: razorpay_payment_id,
       orderId: razorpay_order_id,
     });

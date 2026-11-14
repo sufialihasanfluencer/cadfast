@@ -55,12 +55,17 @@ export default function SubscribePage() {
 
       const result = await initiateRazorpayPayment({
         amount: 99,
+        userId: user.uid,
         userName: user.displayName || "CAD Architect",
         userEmail: user.email || "user@cadfast.ai",
       });
 
       if (result.success && result.paymentId) {
-        await activateSubscription(`Razorpay (${result.paymentId})`);
+        await activateSubscription(`Razorpay (${result.paymentId})`, {
+          paymentId: result.paymentId,
+          orderId: result.orderId,
+          amount: 99,
+        });
         setPaymentRefId(result.paymentId);
 
         try {
@@ -99,7 +104,11 @@ export default function SubscribePage() {
       await new Promise((r) => setTimeout(r, 1200));
 
       const fakeId = "RZP_DEMO_" + Math.random().toString(36).substring(2, 9).toUpperCase();
-      await activateSubscription(`UPI Instant (${fakeId})`);
+      await activateSubscription(`UPI Instant (${fakeId})`, {
+        paymentId: fakeId,
+        orderId: "ORDER_DEMO_" + Date.now(),
+        amount: 99,
+      });
       setPaymentRefId(fakeId);
 
       try {
