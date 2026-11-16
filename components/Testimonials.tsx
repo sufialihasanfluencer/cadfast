@@ -17,7 +17,7 @@ export default function Testimonials() {
       name: "Er. Priya Sundaram",
       role: "Civil Structural Consultant, Bengaluru",
       content:
-        "The DXF export is 100% clean. When I opened it in AutoCAD 2026, all layers (WALLS, DOORS, DIMENSIONS) were perfectly mapped. Locking in the ₹99 first-month deal was the best decision for our firm.",
+        "The DXF export is 100% clean. When I opened it in AutoCAD 2026, all layers (WALLS, DOORS, DIMENSIONS) were perfectly mapped. Subscribing to the CAD FAST Pro monthly license was the best decision for our firm.",
       rating: 5,
       project: "Commercial Floor Plans",
     },

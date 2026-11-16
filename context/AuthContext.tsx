@@ -39,13 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isSubscribeModalOpenState, setIsSubscribeModalOpenState] = useState(false);
   const [isStudioOpen, setIsStudioOpen] = useState(false);
 
-  // Safe wrapper: agar user subscribed hai to payment modal kabhi mat kholo
   const setIsSubscribeModalOpen = (open: boolean) => {
-    if (open && user?.isSubscribed) {
-      console.log("User already subscribed! Skipping payment prompt and opening Studio.");
-      setIsStudioOpen(true);
-      return;
-    }
     setIsSubscribeModalOpenState(open);
   };
 
@@ -70,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (isGloballySubscribed) {
               if (profileData) {
                 profileData.isSubscribed = true;
-                profileData.plan = profileData.plan === "none" ? "early_bird_99" : profileData.plan;
+                profileData.plan = profileData.plan === "none" ? "pro_3000" : profileData.plan;
                 profileData.promptsRemaining = 9999;
               } else {
                 profileData = {
@@ -79,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                   displayName: fbUser.displayName || "CAD Pro Architect",
                   photoURL: null,
                   isSubscribed: true,
-                  plan: "early_bird_99",
+                  plan: "pro_3000",
                   promptsRemaining: 9999,
                 };
               }
@@ -141,17 +135,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(profile);
       setIsAuthModalOpen(false);
 
-      // Agar user subscribed nahi hai to offer modal kholo
-      // Aur agar subscribed hai to directly Studio kholo, payment kabhi mat mango!
-      if (!profile.isSubscribed) {
-        setTimeout(() => {
-          setIsSubscribeModalOpenState(true);
-        }, 400);
-      } else {
-        setTimeout(() => {
-          setIsStudioOpen(true);
-        }, 400);
-      }
+      // Agar user subscribed nahi hai to ₹99 subscription modal kholo
+      // Aur agar subscribed hai to unka Active License Certificate dashboard kholo!
+      setTimeout(() => {
+        setIsSubscribeModalOpenState(true);
+      }, 400);
     } catch (err) {
       console.error("Login failed:", err);
       throw err;
@@ -179,10 +167,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const paymentId = paymentDetails?.paymentId || ("PAY_" + Math.random().toString(36).substring(2, 10).toUpperCase());
       const orderId = paymentDetails?.orderId || ("ORDER_" + Date.now());
-      const amount = paymentDetails?.amount || 99;
+      const amount = paymentDetails?.amount || 3000;
 
       const updated = await activateSubscriptionInDB(user.uid, {
-        plan: "early_bird_99",
+        plan: "pro_3000",
         paymentId,
         orderId,
         paymentMethod: method,
@@ -191,7 +179,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         displayName: user.displayName,
       });
       setUser(updated);
-      setIsSubscribeModalOpenState(false);
+      // Keep modal open so the user immediately sees the Active License Dashboard
+      setIsSubscribeModalOpenState(true);
     } catch (err) {
       console.error("Subscription error:", err);
       throw err;

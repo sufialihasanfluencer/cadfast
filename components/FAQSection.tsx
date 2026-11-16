@@ -12,12 +12,16 @@ export default function FAQSection() {
       a: "CAD FAST uses specialized neural architecture trained on millions of architectural floor plans, municipal building codes, and mechanical engineering blueprints. When you type 'Draw a 4 BHK house plan', it computes structural perimeters, partitions, room ergonomics, door swing clearances, and outputs vector entities directly as CAD geometry.",
     },
     {
+      q: "How do I receive and access the CAD FAST software after payment?",
+      a: "Immediately upon completing your ₹3,000 payment on our checkout page, our system activates your account and generates your official Pro License Key and digital certificate. You can then download and open the CAD FAST standalone software or AutoCAD plugin, enter your registered email or license key, and immediately begin generating unlimited CAD blueprints.",
+    },
+    {
       q: "Can I open the generated designs directly in Autodesk AutoCAD?",
       a: "Yes, 100%! CAD FAST exports native ASCII AutoCAD DXF files (R12/R2018 format) that open natively in AutoCAD, Revit, Civil 3D, SolidWorks, and LibreCAD. The drawing preserves discrete layers (WALLS, DOORS, WINDOWS, DIMENSIONS, FURNITURE) and accurate scale.",
     },
     {
-      q: "What is the ₹99 first-month early access offer?",
-      a: "As part of our early adopter launch in India, you can get complete unlimited access to CAD FAST for just ₹99 for your entire first month (a 95% discount from the regular price of ₹2,000/month). After the first month, your subscription renews at ₹2,000/month, or you can cancel anytime with a single click before renewal.",
+      q: "What is included with the ₹3,000 monthly subscription?",
+      a: "The ₹3,000/month subscription provides full unlimited access to the standalone desktop software (Windows & macOS), the AutoCAD 2018-2026 AI plugin, unlimited prompt-to-CAD blueprint generations, native .DXF/.DWG exports, cloud project history, and full commercial sanction rights.",
     },
     {
       q: "How does Google Login & Firebase work here?",

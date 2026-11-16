@@ -4,11 +4,10 @@ import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import AuthModal from "@/components/AuthModal";
 import SubscriptionModal from "@/components/SubscriptionModal";
-import CADStudioModal from "@/components/CADStudioModal";
 
 export const metadata: Metadata = {
   title: "CAD FAST | AutoCAD, Now With AI — Turn Simple Prompts Into Detailed CAD Drawings",
-  description: "Generate professional AutoCAD 2D/3D architectural floor plans, civil layouts, and mechanical engineering drafts from natural language prompts. Download native .DXF files. Early Bird Offer ₹99/mo.",
+  description: "Generate professional AutoCAD 2D/3D architectural floor plans, civil layouts, and mechanical engineering drafts from natural language prompts. Download native .DXF files. Pro License ₹3,000/mo.",
   icons: {
     icon: "/images/cadgptlogo.png",
     apple: "/images/cadgptlogo.png",
@@ -21,7 +20,7 @@ export const metadata: Metadata = {
     "AutoCAD DXF export",
     "Architecture AI",
     "Civil Engineering AI",
-    "Early access CAD subscription",
+    "CAD FAST Pro subscription",
   ],
 };
 
@@ -41,7 +40,6 @@ export default function RootLayout({
           {/* Global Interactive Modals */}
           <AuthModal />
           <SubscriptionModal />
-          <CADStudioModal />
         </AuthProvider>
       </body>
     </html>

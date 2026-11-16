@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     });
 
     const body = await req.json().catch(() => ({}));
-    const amountInRupees = body.amount || 99; // Default ₹99
+    const amountInRupees = body.amount || 3000; // Fixed ₹3,000/month
     const amountInPaise = Math.round(amountInRupees * 100);
 
     const options = {
@@ -27,8 +27,8 @@ export async function POST(req: Request) {
       currency: "INR",
       receipt: `rcpt_cadfast_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       notes: {
-        plan: "CAD FAST Early Adopter Pass - 1st Month ₹99",
-        regular_price: "₹2,000/mo",
+        plan: "CAD FAST Pro Subscription - ₹3,000/month",
+        subscription_type: "Monthly Fixed License",
       },
     };
 

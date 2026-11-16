@@ -2,7 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { Sparkles, Flame, ShieldCheck, Heart, Crown } from "lucide-react";
+import Link from "next/link";
+import { Sparkles, Flame, ShieldCheck, Heart, Crown, Zap } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Footer() {
@@ -38,24 +39,21 @@ export default function Footer() {
 
           <div className="flex items-center gap-3">
             {user?.isSubscribed ? (
-              <button
-                onClick={() => setIsStudioOpen(true)}
+              <Link
+                href="/checkout"
                 className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-emerald-950/50 transition cursor-pointer flex items-center gap-2"
               >
                 <Crown className="w-4 h-4 text-amber-300" />
-                <span>Pro Active — Launch Studio</span>
-              </button>
+                <span>View License Certificate</span>
+              </Link>
             ) : (
-              <button
-                onClick={() => {
-                  if (!user) setIsAuthModalOpen(true);
-                  else setIsSubscribeModalOpen(true);
-                }}
+              <Link
+                href="/checkout"
                 className="px-5 py-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold text-xs shadow-lg shadow-red-900/50 transition cursor-pointer flex items-center gap-2"
               >
-                <Flame className="w-4 h-4 fill-white" />
-                <span>Get 1st Month for ₹99 (Reg. ₹2,000)</span>
-              </button>
+                <Zap className="w-4 h-4 fill-white" />
+                <span>Get Pro License (₹3,000/month)</span>
+              </Link>
             )}
           </div>
         </div>
@@ -68,7 +66,7 @@ export default function Footer() {
             Product
           </h4>
           <ul className="space-y-2">
-            <li><a href="#demo" className="hover:text-red-400 transition">Interactive CAD Canvas</a></li>
+            <li><a href="#pricing" className="hover:text-red-400 transition">Software License Access</a></li>
             <li><a href="#features" className="hover:text-red-400 transition">Text to CAD Engine</a></li>
             <li><a href="#pricing" className="hover:text-red-400 transition">DXF Vector Export</a></li>
             <li><a href="#how-it-works" className="hover:text-red-400 transition">Layer Management</a></li>

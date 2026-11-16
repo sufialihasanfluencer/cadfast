@@ -60,12 +60,13 @@ export interface UserProfile {
   displayName: string | null;
   photoURL: string | null;
   isSubscribed: boolean;
-  plan?: "early_bird_99" | "pro_2000" | "none";
+  plan?: "pro_3000" | "early_bird_99" | "pro_2000" | "none";
   subscribedAt?: string | null;
   expiresAt?: string | null;
   promptsRemaining?: number;
   totalGenerated?: number;
   paymentId?: string;
+  lastPaymentId?: string;
   orderId?: string;
   paymentMethod?: string;
 }
@@ -104,7 +105,7 @@ export function createDemoUserProfile(name = "CAD Architect (Google Account)"): 
     displayName: savedSubData.displayName || name,
     photoURL: null,
     isSubscribed: isSub,
-    plan: isSub ? (savedSubData.plan || "early_bird_99") : "none",
+    plan: isSub ? (savedSubData.plan || "pro_3000") : "none",
     promptsRemaining: isSub ? 9999 : 5,
     totalGenerated: savedSubData.totalGenerated || 0,
     ...savedSubData,
@@ -245,7 +246,7 @@ export async function logoutUserFirebase(): Promise<void> {
 export async function activateSubscriptionInDB(
   uid: string, 
   paymentInfo: { 
-    plan: "early_bird_99" | "pro_2000"; 
+    plan: "pro_3000" | "early_bird_99" | "pro_2000"; 
     paymentId: string; 
     orderId?: string;
     paymentMethod: string;
@@ -260,14 +261,14 @@ export async function activateSubscriptionInDB(
 
   const updatePayload = {
     isSubscribed: true,
-    plan: paymentInfo.plan,
+    plan: paymentInfo.plan || "pro_3000",
     subscribedAt: now.toISOString(),
     expiresAt: expires.toISOString(),
     promptsRemaining: 9999, // Unlimited for subscribers
     paymentId: paymentInfo.paymentId,
     orderId: paymentInfo.orderId || "",
     paymentMethod: paymentInfo.paymentMethod,
-    amountPaid: paymentInfo.amount,
+    amountPaid: paymentInfo.amount || 3000,
   };
 
   if (isFirebaseConfigured && db) {
@@ -280,13 +281,13 @@ export async function activateSubscriptionInDB(
         uid: uid,
         userEmail: paymentInfo.email || "architect@cadfast.ai",
         userName: paymentInfo.displayName || "CAD Architect",
-        amount: paymentInfo.amount,
-        amountInPaise: Math.round(paymentInfo.amount * 100),
+        amount: paymentInfo.amount || 3000,
+        amountInPaise: Math.round((paymentInfo.amount || 3000) * 100),
         currency: "INR",
-        plan: paymentInfo.plan,
-        planTitle: "CAD FAST Early Access Pass (1st Month ₹99 Offer)",
-        regularPrice: 2000,
-        discountApplied: "95% Early Adopter Discount (Saved ₹1,901)",
+        plan: paymentInfo.plan || "pro_3000",
+        planTitle: "CAD FAST Pro License (₹3,000/month)",
+        regularPrice: 3000,
+        discountApplied: "None (Fixed ₹3,000/mo Subscription)",
         paymentMethod: paymentInfo.paymentMethod,
         gateway: "Razorpay",
         status: "SUCCESS",

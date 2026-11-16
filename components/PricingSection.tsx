@@ -1,45 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { 
   Check, 
   Flame, 
   Sparkles, 
-  Clock, 
   ShieldCheck, 
   ArrowRight, 
   Zap, 
   Crown,
-  HelpCircle
+  HelpCircle,
+  Building2,
+  Layers
 } from "lucide-react";
 
 export default function PricingSection() {
-  const { user, setIsAuthModalOpen, setIsSubscribeModalOpen, setIsStudioOpen } = useAuth();
-
-  const [timeLeft, setTimeLeft] = useState({ hours: 14, minutes: 28, seconds: 45 });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
-        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        return { hours: 23, minutes: 59, seconds: 59 };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const handleSelectPlan = () => {
-    if (!user) {
-      setIsAuthModalOpen(true);
-    } else if (!user.isSubscribed) {
-      setIsSubscribeModalOpen(true);
-    } else {
-      setIsStudioOpen(true);
-    }
-  };
+  const { user } = useAuth();
 
   return (
     <section id="pricing" className="py-20 md:py-28 bg-[#07090e] border-t border-gray-800 relative overflow-hidden">
@@ -50,80 +28,69 @@ export default function PricingSection() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-500/15 border border-red-500/40 text-red-400 text-xs font-bold uppercase tracking-wider mb-4 animate-pulse">
-            <Flame className="w-4 h-4 fill-red-500 text-red-500" />
-            Limited Early Bird Offer
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-500/15 border border-red-500/40 text-red-400 text-xs font-bold uppercase tracking-wider mb-4">
+            <Zap className="w-4 h-4 fill-red-500 text-red-500" />
+            Transparent Software Licensing
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Draft Smarter. Pay Less. <br />
+            Draft Smarter. Direct Licensing. <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-amber-400">
-              Just ₹99 for First Month
+              ₹3,000 / month Full License
             </span>
           </h2>
           <p className="mt-4 text-base sm:text-lg text-gray-400">
-            Grab our early access promotion before the regular price of <strong className="text-white">₹2,000/month</strong> goes live!
+            One flat subscription for architects and engineers. Standalone desktop software, AutoCAD AI plugins, and unlimited DXF blueprint generation.
           </p>
-
-          {/* Countdown Clock */}
-          <div className="mt-6 inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#111726] border border-red-500/40 text-xs text-gray-300 font-mono shadow-lg">
-            <Clock className="w-4 h-4 text-amber-400" />
-            <span>Promotion Ends In:</span>
-            <span className="text-red-400 font-bold text-sm">
-              {String(timeLeft.hours).padStart(2, "0")}h : {String(timeLeft.minutes).padStart(2, "0")}m : {String(timeLeft.seconds).padStart(2, "0")}s
-            </span>
-            <span className="text-gray-500">|</span>
-            <span className="text-emerald-400 font-semibold">17 Early Slots Left</span>
-          </div>
         </div>
 
         {/* PRICING CARDS GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
           
-          {/* Card 1: Free Trial / Demo */}
+          {/* Card 1: Standalone Software Inclusions & Specs */}
           <div className="bg-[#0f1422] border border-gray-800 rounded-3xl p-5 sm:p-7 flex flex-col justify-between shadow-xl">
             <div>
               <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
-                Starter Preview
+                Software Inclusions
               </div>
               <div className="flex items-baseline gap-1 text-white">
-                <span className="text-4xl font-extrabold">₹0</span>
-                <span className="text-xs text-gray-400">/ forever</span>
+                <span className="text-3xl sm:text-4xl font-extrabold text-emerald-400">Included</span>
+                <span className="text-xs text-gray-400">/ with license</span>
               </div>
               <p className="text-xs text-gray-400 mt-2 mb-6">
-                Try the interactive CAD canvas with pre-built 4 BHK and villa blueprints.
+                Official CAD FAST standalone AI software and AutoCAD plugin suite specifications.
               </p>
 
               <div className="space-y-3 text-xs text-gray-300 border-t border-gray-800/80 pt-5">
                 <div className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-gray-500 shrink-0" />
-                  <span>3 Preview CAD Generations</span>
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Windows 10/11 & macOS Desktop Suite</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-gray-500 shrink-0" />
-                  <span>Interactive Zoom & Pan Canvas</span>
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>AutoCAD 2018 - 2026 Direct Plugin</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-gray-500 shrink-0" />
-                  <span>SVG Vector Preview</span>
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Standard DXF & DWG R12/2018 Engine</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-gray-500">
-                  <span>✕ No DXF AutoCAD export</span>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Layer Management (Walls, Doors, Dims)</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-gray-500">
-                  <span>✕ Standard queue latency</span>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Commercial Sanction & Client Rights</span>
                 </div>
               </div>
             </div>
 
-            <button
-              onClick={() => setIsStudioOpen(true)}
-              className="mt-8 w-full py-3.5 px-4 bg-[#182133] hover:bg-[#202c45] text-white font-semibold rounded-2xl border border-gray-700 text-xs transition active:scale-95 cursor-pointer text-center"
-            >
-              Test Free Canvas Demo
-            </button>
+            <div className="mt-8 p-3.5 rounded-2xl bg-[#141b29] border border-gray-700/60 text-center">
+              <div className="text-xs font-bold text-white mb-0.5">Standalone Software Delivery</div>
+              <div className="text-[11px] text-gray-400">License key is generated instantly upon ₹3,000 payment</div>
+            </div>
           </div>
 
-          {/* Card 2: EARLY ACCESS PROMO (FEATURED HERO CARD) */}
+          {/* Card 2: PRO FIXED MONTHLY LICENSE (FEATURED HERO CARD) */}
           <div className="relative bg-gradient-to-b from-[#182136] via-[#121929] to-[#0c101a] border-2 border-red-500 rounded-3xl p-5 sm:p-8 flex flex-col justify-between shadow-2xl shadow-red-950/70 lg:scale-105 z-20">
             {/* Top Ribbon */}
             <div className={`absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-white font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-1.5 ${
@@ -131,30 +98,29 @@ export default function PricingSection() {
                 ? "bg-gradient-to-r from-emerald-600 to-teal-600 shadow-emerald-600/50"
                 : "bg-gradient-to-r from-red-600 to-rose-600 shadow-red-600/50"
             }`}>
-              {user?.isSubscribed ? <Crown className="w-3.5 h-3.5 text-amber-300" /> : <Flame className="w-3.5 h-3.5 fill-white" />}
-              <span>{user?.isSubscribed ? "Active Pro Membership" : "95% OFF - Early Adopter Pass"}</span>
+              {user?.isSubscribed ? <Crown className="w-3.5 h-3.5 text-amber-300" /> : <Zap className="w-3.5 h-3.5 fill-white" />}
+              <span>{user?.isSubscribed ? "Active Pro Membership" : "Monthly Pro License"}</span>
             </div>
 
             <div>
               <div className="flex items-center justify-between mt-2 mb-2">
                 <span className={`text-xs font-bold uppercase tracking-wider ${user?.isSubscribed ? "text-emerald-400" : "text-red-400"}`}>
-                  {user?.isSubscribed ? "Subscribed & Verified" : "Special Launch Offer"}
+                  {user?.isSubscribed ? "Subscribed & Verified" : "CAD FAST Pro Suite"}
                 </span>
                 <span className={`px-2 py-0.5 rounded-md font-bold text-[10px] ${
                   user?.isSubscribed ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"
                 }`}>
-                  {user?.isSubscribed ? "PRO ACTIVE" : "SAVE ₹1,901"}
+                  {user?.isSubscribed ? "PRO ACTIVE" : "FULL ACCESS"}
                 </span>
               </div>
 
               <div className="flex items-baseline gap-2 text-white">
-                <span className="text-5xl font-black tracking-tight">₹99</span>
-                <span className="text-xs text-gray-300 font-medium">/ 1st month</span>
-                <span className="text-base line-through text-gray-500 ml-1">₹2,000/mo</span>
+                <span className="text-5xl font-black tracking-tight">₹3,000</span>
+                <span className="text-xs text-gray-300 font-medium">/ month</span>
               </div>
 
               <p className="text-xs text-gray-300 mt-2 mb-6">
-                Full unlimited access to CAD FAST. Generate any floor plan with AI and download ready-to-use AutoCAD .DXF files.
+                Full unlimited access to CAD FAST standalone software and AutoCAD AI plugin suite. Generate blueprints and download native .DXF files.
               </p>
 
               <div className="space-y-3 text-xs text-gray-200 border-t border-gray-700/80 pt-5">
@@ -174,19 +140,19 @@ export default function PricingSection() {
                   <div className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                     <Check className="w-3 h-3" />
                   </div>
-                  <span>Multi-layer Architecture (Walls, Doors, Dimensions)</span>
+                  <span>Standalone Software Suite (Windows & macOS)</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <div className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                     <Check className="w-3 h-3" />
                   </div>
-                  <span>High-speed AI Model (&lt; 5s rendering)</span>
+                  <span>AutoCAD 2018 - 2026 AI Plugin</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <div className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
                     <Check className="w-3 h-3" />
                   </div>
-                  <span>Firebase Cloud Storage & Project History</span>
+                  <span>Firebase Cloud Storage & Account Sync</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <div className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
@@ -200,57 +166,57 @@ export default function PricingSection() {
             <div className="mt-8">
               {user?.isSubscribed ? (
                 <>
-                  <button
-                    onClick={() => setIsStudioOpen(true)}
+                  <Link
+                    href="/checkout"
                     className="w-full py-4 px-6 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold rounded-2xl shadow-xl shadow-emerald-950/60 flex items-center justify-center gap-2 transition active:scale-95 text-sm cursor-pointer"
                   >
                     <Crown className="w-5 h-5 text-amber-300" />
-                    <span>✓ Pro Plan Active — Launch Studio</span>
-                  </button>
+                    <span>✓ Pro Plan Active — View Certificate</span>
+                  </Link>
                   <div className="mt-2.5 text-center text-[11px] text-emerald-400 font-semibold">
-                    Payment Verified • Unlimited CAD Generations Active
+                    Payment Verified • License Key Active & Ready
                   </div>
                 </>
               ) : (
                 <>
-                  <button
-                    onClick={handleSelectPlan}
+                  <Link
+                    href="/checkout"
                     className="w-full py-4 px-6 bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white font-extrabold rounded-2xl shadow-xl shadow-red-900/60 flex items-center justify-center gap-2 transition active:scale-95 text-sm cursor-pointer"
                   >
                     <Zap className="w-4 h-4 fill-white" />
-                    <span>Get 1st Month for ₹99</span>
+                    <span>Subscribe Now — ₹3,000/mo</span>
                     <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Link>
                   <div className="mt-2.5 text-center text-[11px] text-gray-400">
-                    Cancel anytime before renewal • Instant UPI/GPay
+                    Instant UPI, Cards & Netbanking • 256-Bit SSL
                   </div>
                 </>
               )}
             </div>
           </div>
 
-          {/* Card 3: Post-Launch Regular Price */}
+          {/* Card 3: Annual / Studio Pass */}
           <div className="bg-[#0f1422] border border-gray-800 rounded-3xl p-5 sm:p-7 flex flex-col justify-between shadow-xl">
             <div>
               <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
-                Standard Membership
+                Annual Studio Pass
               </div>
               <div className="flex items-baseline gap-1 text-white">
-                <span className="text-4xl font-extrabold">₹2,000</span>
-                <span className="text-xs text-gray-400">/ month</span>
+                <span className="text-4xl font-extrabold">₹30,000</span>
+                <span className="text-xs text-gray-400">/ year</span>
               </div>
-              <p className="text-xs text-gray-400 mt-2 mb-6">
-                Standard price once the early access promo threshold is reached.
+              <p className="text-xs text-emerald-400 font-semibold mt-1 mb-6">
+                Save ₹6,000 (Get 2 Months Free)
               </p>
 
               <div className="space-y-3 text-xs text-gray-300 border-t border-gray-800/80 pt-5">
                 <div className="flex items-center gap-2.5">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Everything in Early Access Plan</span>
+                  <span>Everything in Monthly Pro License</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Unlimited DXF & DWG Downloads</span>
+                  <span>Multi-Seat Team Floating License</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -258,29 +224,22 @@ export default function PricingSection() {
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Batch Prompting</span>
+                  <span>Custom Building Bye-law Presets</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Custom Building Bye-law Presets</span>
+                  <span>Early Access to 3D Neural Models</span>
                 </div>
               </div>
             </div>
 
             <div className="mt-8">
-              <button
-                onClick={() => {
-                  if (user?.isSubscribed) setIsStudioOpen(true);
-                  else handleSelectPlan();
-                }}
-                className={`w-full py-3.5 px-4 rounded-2xl border text-xs font-semibold transition active:scale-95 cursor-pointer text-center ${
-                  user?.isSubscribed
-                    ? "bg-emerald-950/30 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/40"
-                    : "bg-[#182133] hover:bg-[#202c45] text-white border-gray-700"
-                }`}
+              <Link
+                href="/checkout"
+                className="block w-full py-3.5 px-4 rounded-2xl border text-xs font-semibold transition active:scale-95 cursor-pointer text-center bg-[#182133] hover:bg-[#202c45] text-white border-gray-700"
               >
-                {user?.isSubscribed ? "✓ Included in Your Active Pass" : "Lock In ₹99 Before Price Increases"}
-              </button>
+                Get Annual Pass
+              </Link>
             </div>
           </div>
 

@@ -54,7 +54,7 @@ export async function initiateRazorpayPayment(options: {
   const orderRes = await fetch("/api/razorpay/order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount: options.amount || 99 }),
+    body: JSON.stringify({ amount: options.amount || 3000 }),
   });
 
   const orderData = await orderRes.json();
@@ -69,7 +69,7 @@ export async function initiateRazorpayPayment(options: {
       amount: orderData.amount, // in paise
       currency: orderData.currency || "INR",
       name: "CAD FAST",
-      description: "Early Access Pass — 1st Month Access (Save 95%)",
+      description: "CAD FAST Pro License — 1 Month Full Access (₹3,000/mo)",
       image: "/images/cadgptlogo.png",
       order_id: orderData.orderId,
       prefill: {
@@ -101,7 +101,7 @@ export async function initiateRazorpayPayment(options: {
               uid: options.userId,
               userEmail: options.userEmail,
               userName: options.userName,
-              amount: options.amount || 99,
+              amount: options.amount || 3000,
             }),
           });
 

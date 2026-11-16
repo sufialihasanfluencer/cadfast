@@ -20,7 +20,7 @@ export default function HomePage() {
       {/* Feature Showcase & AutoCAD Integration */}
       <FeatureShowcase />
 
-      {/* ₹99 Early Access Subscription Section */}
+      {/* CAD FAST Pro Subscription Section */}
       <PricingSection />
 
       {/* Testimonials from Architects & Drafters */}

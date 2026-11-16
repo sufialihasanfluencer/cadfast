@@ -70,19 +70,19 @@ export default function AuthModal() {
           </p>
         </div>
 
-        {/* Offer Callout */}
+        {/* Plan Callout */}
         <div className="mb-5 bg-gradient-to-r from-red-950/40 via-red-900/20 to-transparent border border-red-500/30 rounded-2xl p-3.5 flex items-center justify-between">
           <div>
             <div className="text-[10px] font-bold uppercase tracking-wider text-red-400">
-              Limited Early Access Offer
+              Professional Software Licensing
             </div>
             <div className="text-xs sm:text-sm font-semibold text-white">
-              Get 1st Month for <span className="text-red-400 text-sm sm:text-base font-bold">₹99</span>{" "}
-              <span className="line-through text-gray-400 text-xs font-normal">₹2,000/mo</span>
+              Full Pro License for <span className="text-red-400 text-sm sm:text-base font-bold">₹3,000</span>{" "}
+              <span className="text-gray-400 text-xs font-normal">/ month</span>
             </div>
           </div>
           <span className="px-2.5 py-1 rounded-lg bg-red-600 text-white font-bold text-xs tracking-wider">
-            95% OFF
+            PRO
           </span>
         </div>
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { 
   Sparkles, 
@@ -79,31 +80,31 @@ export default function Navbar() {
 
           {/* DESKTOP NAV */}
           <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-gray-300">
-            <a href="#demo" className="hover:text-red-400 transition">
-              Live Demo
-            </a>
             <a href="#how-it-works" className="hover:text-red-400 transition">
               How It Works
             </a>
             <a href="#features" className="hover:text-red-400 transition">
               Features
             </a>
+            <a href="#pricing" className="hover:text-red-400 transition">
+              Pricing & License
+            </a>
             {user?.isSubscribed ? (
-              <button
-                onClick={() => setIsStudioOpen(true)}
+              <Link
+                href="/checkout"
                 className="flex items-center gap-1.5 text-emerald-400 font-semibold hover:text-emerald-300 transition cursor-pointer"
               >
                 <Crown className="w-4 h-4 text-emerald-400" />
-                <span>Studio (Pro Active)</span>
-              </button>
+                <span>Active License & Key</span>
+              </Link>
             ) : (
-              <a 
-                href="#pricing" 
+              <Link 
+                href="/checkout" 
                 className="flex items-center gap-1.5 text-red-400 font-semibold hover:text-red-300 transition"
               >
-                <Flame className="w-4 h-4 fill-red-500 text-red-500" />
-                <span>₹99 Early Offer</span>
-              </a>
+                <Zap className="w-4 h-4 fill-red-500 text-red-500" />
+                <span>Pro License (₹3,000/mo)</span>
+              </Link>
             )}
           </nav>
 
@@ -118,24 +119,35 @@ export default function Navbar() {
                     <span>Pro Active</span>
                   </div>
                 ) : (
-                  <button
-                    onClick={() => setIsSubscribeModalOpen(true)}
+                  <Link
+                    href="/checkout"
                     className="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-red-600/20 border border-red-500/50 text-red-400 text-xs font-bold hover:bg-red-600/30 transition cursor-pointer"
                   >
-                    <Flame className="w-3.5 h-3.5" />
-                    <span>Activate ₹99</span>
-                  </button>
+                    <Zap className="w-3.5 h-3.5" />
+                    <span>Subscribe ₹3,000</span>
+                  </Link>
                 )}
 
-                {/* Studio CTA Button */}
-                <button
-                  onClick={() => setIsStudioOpen(true)}
-                  className="flex items-center gap-1 px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-xl text-xs shadow-md shadow-red-900/40 transition active:scale-95 cursor-pointer"
-                >
-                  <LayoutGrid className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Launch Studio</span>
-                  <span className="sm:hidden">Studio</span>
-                </button>
+                {/* Action CTA Button */}
+                {user.isSubscribed ? (
+                  <Link
+                    href="/checkout"
+                    className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl text-xs shadow-md shadow-emerald-950/40 transition active:scale-95 cursor-pointer"
+                  >
+                    <Crown className="w-3.5 h-3.5 text-amber-300" />
+                    <span className="hidden sm:inline">Active License & Key</span>
+                    <span className="sm:hidden">License</span>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/checkout"
+                    className="flex items-center gap-1 px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-xl text-xs shadow-md shadow-red-900/40 transition active:scale-95 cursor-pointer"
+                  >
+                    <Zap className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Get License (₹3,000)</span>
+                    <span className="sm:hidden">Subscribe</span>
+                  </Link>
+                )}
 
                 {/* Account Badge (No photo) */}
                 <div className="flex items-center gap-1.5 pl-1 border-l border-gray-800">
@@ -182,14 +194,14 @@ export default function Navbar() {
                   <span>Google Login</span>
                 </button>
 
-                <button
-                  onClick={() => setIsAuthModalOpen(true)}
+                <Link
+                  href="/checkout"
                   className="flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white font-extrabold rounded-xl text-xs shadow-md shadow-red-900/50 transition active:scale-95 cursor-pointer shrink-0"
                 >
-                  <Flame className="w-3.5 h-3.5 fill-white text-white" />
-                  <span className="hidden xs:inline sm:inline">Get Early Access (₹99)</span>
-                  <span className="xs:hidden">₹99 Deal</span>
-                </button>
+                  <Zap className="w-3.5 h-3.5 fill-white text-white" />
+                  <span className="hidden xs:inline sm:inline">Get Pro License (₹3,000/mo)</span>
+                  <span className="xs:hidden">₹3,000</span>
+                </Link>
               </div>
             )}
 
@@ -223,7 +235,7 @@ export default function Navbar() {
                     </div>
                     {user.isSubscribed ? (
                       <span className="inline-block mt-0.5 text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.2 rounded">
-                        PRO ACTIVE (₹99 Plan)
+                        PRO ACTIVE (₹3,000 Plan)
                       </span>
                     ) : (
                       <span className="inline-block mt-0.5 text-[9px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-1.5 py-0.2 rounded">
@@ -273,30 +285,19 @@ export default function Navbar() {
                   <span>Sign In with Google</span>
                 </button>
 
-                <button
-                  onClick={() => {
-                    setIsSubscribeModalOpen(true);
-                    setMobileMenuOpen(false);
-                  }}
+                <Link
+                  href="/checkout"
+                  onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold rounded-xl text-xs shadow-md shadow-red-900/40"
                 >
-                  <Flame className="w-4 h-4 fill-white" />
-                  <span>Claim 1st Month for ₹99 (Reg. ₹2,000)</span>
-                </button>
+                  <Zap className="w-4 h-4 fill-white" />
+                  <span>Get CAD FAST Pro License (₹3,000/mo)</span>
+                </Link>
               </div>
             )}
 
             {/* Mobile Nav Links */}
             <div className="space-y-1 text-sm font-medium text-gray-200">
-              <a
-                href="#demo"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-white/5 transition"
-              >
-                <span>Interactive CAD Demo</span>
-                <ChevronRight className="w-4 h-4 text-gray-500" />
-              </a>
-
               <a
                 href="#how-it-works"
                 onClick={() => setMobileMenuOpen(false)}
@@ -311,56 +312,73 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center justify-between p-2.5 rounded-xl hover:bg-white/5 transition"
               >
-                <span>AutoCAD DXF & Layers</span>
+                <span>AutoCAD DXF & Features</span>
                 <ChevronRight className="w-4 h-4 text-gray-500" />
               </a>
 
+              <Link
+                href="/checkout"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-white/5 transition"
+              >
+                <span>Software License & Checkout</span>
+                <ChevronRight className="w-4 h-4 text-gray-500" />
+              </Link>
+
               {user?.isSubscribed ? (
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setIsStudioOpen(true);
-                  }}
-                  className="w-full flex items-center justify-between p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-400 font-bold transition text-left"
+                <Link
+                  href="/checkout"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-between p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-400 font-bold transition text-left cursor-pointer"
                 >
                   <span className="flex items-center gap-1.5">
                     <Crown className="w-4 h-4 text-emerald-400" />
-                    <span>CAD FAST Pro Active</span>
+                    <span>View License Certificate</span>
                   </span>
                   <span className="px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-black">
-                    UNLIMITED
+                    PRO ACTIVE
                   </span>
-                </button>
+                </Link>
               ) : (
-                <a
-                  href="#pricing"
+                <Link
+                  href="/checkout"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center justify-between p-2.5 rounded-xl bg-red-950/30 border border-red-500/30 text-red-400 font-bold transition"
                 >
                   <span className="flex items-center gap-1.5">
-                    <Flame className="w-4 h-4 fill-red-500 text-red-500" />
-                    <span>Early Bird Offer — ₹99/mo</span>
+                    <Zap className="w-4 h-4 fill-red-500 text-red-500" />
+                    <span>Pro License — ₹3,000/mo</span>
                   </span>
                   <span className="px-2 py-0.5 rounded bg-red-600 text-white text-[10px] font-black">
-                    95% OFF
+                    ACTIVE
                   </span>
-                </a>
+                </Link>
               )}
             </div>
 
-            {/* Launch Studio Button */}
+            {/* License Action Button */}
             <div className="pt-3 mt-3 border-t border-gray-800">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setIsStudioOpen(true);
-                }}
-                className="w-full py-3 bg-[#182133] hover:bg-[#202c45] border border-gray-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg"
-              >
-                <LayoutGrid className="w-4 h-4 text-red-500" />
-                <span>Open Full CAD Studio Workspace</span>
-                <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
-              </button>
+              {user?.isSubscribed ? (
+                <Link
+                  href="/checkout"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+                >
+                  <Crown className="w-4 h-4 text-amber-300" />
+                  <span>Show Pro License Key & Certificate</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-white/80" />
+                </Link>
+              ) : (
+                <Link
+                  href="/checkout"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-3 bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+                >
+                  <Zap className="w-4 h-4 fill-white" />
+                  <span>Activate Pro License Key (₹3,000)</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-white/80" />
+                </Link>
+              )}
             </div>
           </div>
         )}

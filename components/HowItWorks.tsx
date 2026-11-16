@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { MessageSquareText, Cpu, Eye, Download, Sparkles, ArrowRight, Crown } from "lucide-react";
+import Link from "next/link";
+import { MessageSquareText, Cpu, Eye, Download, Sparkles, ArrowRight, Crown, Zap } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function HowItWorks() {
@@ -27,9 +28,9 @@ export default function HowItWorks() {
     {
       step: "03",
       icon: Eye,
-      title: "Interactive CAD Canvas & Layers",
+      title: "CAD FAST Software Visualization",
       subtitle: "Full AutoCAD-style layer management",
-      desc: "Preview your blueprint inside our dark-theme CAD workspace. Toggle individual layers (WALLS, DOORS, FURNITURE, DIMENSIONS) with millimetric precision.",
+      desc: "Preview your blueprint inside the CAD FAST standalone software. Toggle individual layers (WALLS, DOORS, FURNITURE, DIMENSIONS) with millimetric precision.",
       accent: "from-amber-500 to-orange-500",
     },
     {
@@ -102,36 +103,34 @@ export default function HowItWorks() {
         <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-red-950/40 via-[#141b29] to-red-950/30 border border-red-500/40 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
           <div>
             <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${user?.isSubscribed ? "text-emerald-400" : "text-red-400"}`}>
-              {user?.isSubscribed ? "Pro Membership Active" : "Early Access Registration"}
+              {user?.isSubscribed ? "Pro Membership Active" : "Professional Software Licensing"}
             </div>
             <h4 className="text-xl sm:text-2xl font-bold text-white">
-              {user?.isSubscribed ? "Unlimited Text-to-CAD Generations Active" : "Try CAD FAST with Google Sign-in for just ₹99"}
+              {user?.isSubscribed ? "Pro License Active & Ready to Use" : "Get CAD FAST Software License for ₹3,000/month"}
             </h4>
             <p className="text-xs sm:text-sm text-gray-400 mt-1">
-              {user?.isSubscribed ? "Aapka subscription verified hai. CAD studio me jaakar naye drawings create karein!" : "Regular price is ₹2,000/mo. Lock in 95% discount for your first month now!"}
+              {user?.isSubscribed ? "Aapka subscription verified hai. Apna license key copy karein aur software me enter karein." : "Full standalone software access, AutoCAD 2018-2026 plugin, and instant license key delivery."}
             </p>
           </div>
 
           {user?.isSubscribed ? (
-            <button
-              onClick={() => setIsStudioOpen(true)}
+            <Link
+              href="/checkout"
               className="px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl text-xs sm:text-sm shadow-xl shadow-emerald-950/50 flex items-center gap-2 shrink-0 transition active:scale-95 cursor-pointer"
             >
               <Crown className="w-4 h-4 text-amber-300" />
-              <span>Launch Studio (Pro Active)</span>
+              <span>View License Certificate</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           ) : (
-            <button
-              onClick={() => {
-                if (!user) setIsAuthModalOpen(true);
-                else setIsSubscribeModalOpen(true);
-              }}
+            <Link
+              href="/checkout"
               className="px-6 py-3.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-xl text-xs sm:text-sm shadow-xl shadow-red-900/50 flex items-center gap-2 shrink-0 transition active:scale-95 cursor-pointer"
             >
-              <span>Claim ₹99 Offer Now</span>
+              <Zap className="w-4 h-4 fill-white" />
+              <span>Subscribe for ₹3,000/mo</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           )}
         </div>
       </div>

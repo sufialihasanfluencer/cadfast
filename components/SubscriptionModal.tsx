@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { initiateRazorpayPayment } from "@/lib/razorpayClient";
 import confetti from "canvas-confetti";
+import ActiveLicenseDashboard from "@/components/ActiveLicenseDashboard";
 import { 
   X, 
   Check, 
@@ -68,7 +69,7 @@ export default function SubscriptionModal() {
 
       // Trigger Razorpay live checkout
       const result = await initiateRazorpayPayment({
-        amount: 99,
+        amount: 3000,
         userId: user.uid,
         userName: user.displayName || "CAD Architect",
         userEmail: user.email || "user@cadfast.ai",
@@ -79,7 +80,7 @@ export default function SubscriptionModal() {
         await activateSubscription(`Razorpay (${result.paymentId})`, {
           paymentId: result.paymentId,
           orderId: result.orderId,
-          amount: 99,
+          amount: 3000,
         });
         setSuccessPaymentId(result.paymentId);
         
@@ -123,7 +124,7 @@ export default function SubscriptionModal() {
       await activateSubscription(`UPI QR (${fakePayId})`, {
         paymentId: fakePayId,
         orderId: "ORDER_UPI_" + Date.now(),
-        amount: 99,
+        amount: 3000,
       });
       setSuccessPaymentId(fakePayId);
 
@@ -156,90 +157,41 @@ export default function SubscriptionModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-xl bg-[#0f141f] border border-red-500/30 rounded-3xl p-5 sm:p-8 shadow-2xl shadow-red-950/60 text-white overflow-hidden max-h-[92vh] overflow-y-auto"
+        className={`relative w-full ${
+          user?.isSubscribed || isSuccess
+            ? "max-w-4xl max-h-[96vh] overflow-y-auto"
+            : "max-w-xl bg-[#0f141f] border border-red-500/30 rounded-3xl p-5 sm:p-8 shadow-2xl shadow-red-950/60 text-white overflow-hidden max-h-[92vh] overflow-y-auto"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Glowing background */}
         <div className="absolute -top-32 -right-32 w-72 h-72 bg-red-600/25 rounded-full blur-3xl pointer-events-none"></div>
 
-        {/* Close Button */}
-        <button
-          onClick={() => setIsSubscribeModalOpen(false)}
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition cursor-pointer"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {/* If user is already subscribed or just completed payment, show Active Pro Screen (NEVER ask for payment) */}
+        {/* If user is already subscribed or just completed payment, show Formal Active License Dashboard */}
         {user?.isSubscribed || isSuccess ? (
-          /* Success & Pro Active Screen */
-          <div className="flex flex-col items-center text-center py-6 animate-in zoom-in-95 duration-200">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-2xl shadow-emerald-500/40 mb-4 animate-bounce">
-              <Check className="w-10 h-10 text-white stroke-[3]" />
-            </div>
-
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold mb-2 border border-emerald-500/40">
-              <Award className="w-4 h-4" />
-              <span>{isSuccess ? "Payment Verified & Activated!" : "CAD FAST Pro Active"}</span>
-            </div>
-
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
-              {isSuccess ? "Welcome to CAD FAST Pro!" : "You Are Already a Pro Member!"}
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-300 max-w-sm mb-6">
-              Aapka subscription active hai aur account verify ho chuka hai. Aapko dobara payment karne ki zaroorat nahi hai!
-            </p>
-
-            <div className="w-full bg-[#141a26] border border-gray-700/80 rounded-2xl p-4 mb-6 text-left space-y-2.5 text-xs">
-              <div className="flex justify-between text-gray-300">
-                <span>Account Email:</span>
-                <span className="font-semibold text-white">{user?.email || "Google Account"}</span>
-              </div>
-              <div className="flex justify-between text-gray-300">
-                <span>Subscription Status:</span>
-                <span className="font-semibold text-emerald-400 flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> Active (No further payment needed)
-                </span>
-              </div>
-              <div className="flex justify-between text-gray-300">
-                <span>Plan Type:</span>
-                <span className="font-semibold text-red-400">Early Access Pass (₹99 / 1st mo)</span>
-              </div>
-              <div className="flex justify-between text-gray-300">
-                <span>CAD Generations:</span>
-                <span className="font-semibold text-emerald-400">Unlimited Text-to-CAD ✓</span>
-              </div>
-              <div className="flex justify-between text-gray-300">
-                <span>AutoCAD .DXF Downloads:</span>
-                <span className="font-semibold text-emerald-400">Unlocked & Unlimited ✓</span>
-              </div>
-            </div>
-
-            <button
-              onClick={handleOpenStudio}
-              className="w-full py-4 px-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-2xl shadow-xl shadow-emerald-950/50 flex items-center justify-center gap-2 transition active:scale-[0.98] text-base cursor-pointer"
-            >
-              <Sparkles className="w-5 h-5 text-amber-300" />
-              <span>Launch AI CAD Studio Now</span>
-              <ArrowRight className="w-5 h-5 ml-1" />
-            </button>
-          </div>
+          <ActiveLicenseDashboard 
+            isModal 
+            onClose={() => {
+              setIsSubscribeModalOpen(false);
+              setIsSuccess(false);
+            }} 
+          />
         ) : (
           <>
-            {/* Header / Urgency */}
+            {/* Close Button */}
+            <button
+              onClick={() => setIsSubscribeModalOpen(false)}
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header / Info */}
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/15 border border-red-500/40 text-red-400 text-xs font-bold tracking-wide uppercase">
-                <Flame className="w-3.5 h-3.5 fill-red-500 text-red-500" />
-                Early Bird Offer - Save 95%
+                <Zap className="w-3.5 h-3.5 fill-red-500 text-red-500" />
+                Monthly Pro Subscription
               </span>
-              <div className="flex items-center gap-1 text-[11px] text-amber-400 font-mono">
-                <Clock className="w-3 h-3" />
-                <span>
-                  Ends in {String(timeLeft.hours).padStart(2, "0")}:
-                  {String(timeLeft.minutes).padStart(2, "0")}:
-                  {String(timeLeft.seconds).padStart(2, "0")}
-                </span>
-              </div>
             </div>
 
             <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-2">
@@ -254,28 +206,22 @@ export default function SubscriptionModal() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <div className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                    First Month Early Access
+                    Fixed Monthly Subscription
                   </div>
                   <div className="flex items-baseline gap-2 mt-1">
                     <span className="text-4xl sm:text-5xl font-black text-white">
-                      ₹99
+                      ₹3,000
                     </span>
-                    <span className="text-xs text-gray-400">/ 1st month</span>
-                    <span className="text-sm line-through text-gray-500 font-medium">
-                      ₹2,000/mo
-                    </span>
+                    <span className="text-xs text-gray-400">/ month</span>
                   </div>
-                  <p className="text-[11px] text-red-400 mt-1 font-medium">
-                    *After 1st month: regular ₹2,000/mo. Cancel anytime in 1-click.
+                  <p className="text-[11px] text-gray-400 mt-1 font-medium">
+                    All-inclusive monthly subscription. Unlimited blueprints & native .DXF export.
                   </p>
                 </div>
 
                 <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between">
                   <div className="px-3 py-1 rounded-xl bg-red-600 text-white font-black text-xs tracking-wider uppercase shadow-lg shadow-red-600/40">
-                    SAVE ₹1,901
-                  </div>
-                  <div className="text-[11px] text-gray-400 mt-1 sm:mt-2">
-                    Only <span className="text-amber-400 font-bold">17 seats left</span>
+                    PRO SUITE
                   </div>
                 </div>
               </div>
@@ -384,7 +330,7 @@ export default function SubscriptionModal() {
                   UPI ID: <span className="text-emerald-400 font-bold">cadfast.ai@icici</span>
                 </div>
                 <div className="text-[11px] text-gray-500 mt-1">
-                  Amount: ₹99.00 • Instant Approval
+                  Amount: ₹3,000.00 • Instant Approval
                 </div>
               </div>
             )}
@@ -403,7 +349,7 @@ export default function SubscriptionModal() {
               ) : (
                 <>
                   <Lock className="w-4 h-4" />
-                  <span>Pay ₹99 & Unlock AI CAD Studio</span>
+                  <span>Pay ₹3,000 & Activate Pro License</span>
                   <ArrowRight className="w-5 h-5 ml-1" />
                 </>
               )}
