@@ -181,6 +181,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(updated);
       // Keep modal open so the user immediately sees the Active License Dashboard
       setIsSubscribeModalOpenState(true);
+
+      // Instantly dispatch formal payment success & license confirmation email
+      if (user.email) {
+        fetch("/api/payment/send-confirmation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            toEmail: user.email,
+            userName: user.displayName,
+            paymentId,
+            orderId,
+            amount,
+          }),
+        }).catch((e) => console.warn("Email confirmation trigger notice:", e));
+      }
     } catch (err) {
       console.error("Subscription error:", err);
       throw err;

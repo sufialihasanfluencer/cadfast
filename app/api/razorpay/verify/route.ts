@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { savePaymentToFirestore } from "@/lib/paymentStore";
+import { sendPaymentSuccessEmail } from "@/lib/emailService";
 
 export async function POST(req: Request) {
   try {
@@ -61,9 +62,21 @@ export async function POST(req: Request) {
       status: "SUCCESS",
     });
 
+    // Dispatch formal payment success & license activation email
+    if (userEmail) {
+      sendPaymentSuccessEmail({
+        toEmail: userEmail,
+        userName: userName || "CAD Architect",
+        paymentId: razorpay_payment_id,
+        orderId: razorpay_order_id,
+        amount: amount || 3000,
+        planName: "CAD FAST Pro License",
+      }).catch((emailErr) => console.error("Email dispatch warning:", emailErr));
+    }
+
     return NextResponse.json({
       success: true,
-      message: "Payment signature verified and stored in database successfully",
+      message: "Payment signature verified, saved to DB, and confirmation email dispatched",
       savedInDB,
       paymentId: razorpay_payment_id,
       orderId: razorpay_order_id,
